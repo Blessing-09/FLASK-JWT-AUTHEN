@@ -5,21 +5,24 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-import bcrypt
 from flask_jwt_extended import create_access_token
+from flask_bcrypt import Bcrypt
+
 
 api = Blueprint('api', __name__)
-
+bcrypt = Bcrypt()
 # Allow CORS requests to this API
 CORS(api)
 
 @api.route('/signup', methods=['POST'])
 def signup():
-    data = request.get_json
+    data = request.get_json()
     if data is None:
          return jsonify({"Error": "Data Not Provided"}), 400
     email = data.get("email", None)
     password = data.get("password", None)
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
 
 
 @api.route('/login', methods=['POST'])

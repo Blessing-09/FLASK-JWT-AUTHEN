@@ -10,7 +10,10 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from flask_bcrypt import bcrypt
+#import the two libraries below in app.py where it is initialised and can be used in any other file like in the route.py
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_bcrypt import Bcrypt
+from datetime import timedelta
 
 # from models import Person
 
@@ -30,9 +33,14 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
-db.init_app(app) #initializando la db con .init
+db.init_app(app) #Initializes the database with your Flask app(db con .init)
 
+#Configure JWT base (declare JWT expiration and sets to 2 hour)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)  # or minutes, days, etc.
+
+#initialising the BCRYPT AND JWT extensions
 bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 
 # add the admin
 setup_admin(app)
