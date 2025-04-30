@@ -13,18 +13,28 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
+@api.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json
+    if data is None:
+         return jsonify({"Error": "Data Not Provided"}), 400
+    email = data.get("email", None)
+    password = data.get("password", None)
+
 
 @api.route('/login', methods=['POST'])
 def create_token():
     data = request.json
+    if data is None:
+         return jsonify({"Error": "Data Not Provided"}), 400
     email = data.get("email", None)
     password = data.get("password", None)
 
-     # Query your database for username and password
+     # Query your database for email and password
     user = User.query.filter_by(email = email, password = password).first()
     if user is None:
         # The user was not found on the database
-        return jsonify({"msg": "Bad username or password"}), 401
+        return jsonify({"msg": "Bad email or password"}), 401
     
     # Create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
