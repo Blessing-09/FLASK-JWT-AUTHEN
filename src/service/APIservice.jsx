@@ -40,7 +40,7 @@ export const createSignup = async (dispatch, info) => {
 };
 
 
-export const createLogin = async (dispatch, info) => {
+/*export const createLogin = async (dispatch, info) => {
     try{
     const response = await fetch(`${backendUrl}/login`,
         {
@@ -56,7 +56,7 @@ export const createLogin = async (dispatch, info) => {
         console.log(data)
         dispatch({type: "signup", payload:data.token})
     } 
-    else(response.status === 401) {
+    else {
         const errorMsg = await response.json()
         alert(errorMsg.msg)
     } 
@@ -64,4 +64,4 @@ export const createLogin = async (dispatch, info) => {
 } catch (error) {
     console.error("Network error:", error);
 }
-};
+};*/

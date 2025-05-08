@@ -1,14 +1,14 @@
 import React, { useState } from "react"; //useState is imported from react
-import { useParams, useNavigate } from "react-router-dom"; //useParam, useLocation, Link, useNavigate de react-dom
+import { useNavigate } from "react-router-dom"; //useParam, useLocation, Link, useNavigate de react-dom
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { createSignup } from "../../service/APIservice";
-import {Login} from "../pages/Login";
+//import {Login} from "../pages/Login";
 
 
 
 
 const SignUp = () => {
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const {store, dispatch} = useGlobalReducer()
   const [formData, setFormData] = useState({
     email: "",
@@ -23,7 +23,7 @@ const SignUp = () => {
   const handleFormInput = (e) => {
     e.preventDefault();
     createSignup(dispatch, formData)
-    navigate("/Login");
+    //navigate("/Login");
   };
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
   return (

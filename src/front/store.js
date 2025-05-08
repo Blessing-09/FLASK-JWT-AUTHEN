@@ -3,7 +3,7 @@ export const initialStore=()=>{
     message: null,
     signup: [],
     login: [],
-    token: []
+    //token: []
   }
 }
 
