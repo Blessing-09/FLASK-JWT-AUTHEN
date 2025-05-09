@@ -17,7 +17,7 @@ export default function storeReducer(store, action = {}) {
       case "login":
         return {
           ...store,
-          login: [...store.login, action.payload]
+          login: [action.payload]
         };
     default:
       throw Error('Unknown action.');

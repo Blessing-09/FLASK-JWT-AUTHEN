@@ -40,7 +40,7 @@ export const createSignup = async (dispatch, info) => {
 };
 
 
-/*export const createLogin = async (dispatch, info) => {
+export const createLogin = async (dispatch, info) => {
     try{
     const response = await fetch(`${backendUrl}/login`,
         {
@@ -51,10 +51,12 @@ export const createSignup = async (dispatch, info) => {
             body: JSON.stringify(info)
         }
     );
-    if(response.status === 201) {
+    if(response.status === 200) {
         const data = await response.json()
         console.log(data)
-        dispatch({type: "signup", payload:data.token})
+         // Store the token in localStorage
+        localStorage.setItem("authToken", data.token);
+        dispatch({type: "login", payload:data.token})
     } 
     else {
         const errorMsg = await response.json()
@@ -64,4 +66,4 @@ export const createSignup = async (dispatch, info) => {
 } catch (error) {
     console.error("Network error:", error);
 }
-};*/
+};

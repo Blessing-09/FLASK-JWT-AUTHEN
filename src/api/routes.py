@@ -59,7 +59,7 @@ def create_token():
     
     # Create a new token with the user id inside
     access_token = create_access_token(identity=str(user.id)) #used to identify who is making the request
-    return jsonify({ "token": access_token, "user_id": user.id }), 201
+    return jsonify({ "token": access_token, "user_id": user.id }), 200
 
 
 # Protect a route with jwt_required, which will kick out requests without a valid JWT

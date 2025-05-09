@@ -37,7 +37,8 @@ db.init_app(app) #Initializes the database with your Flask app(db con .init)
 
 #Configure JWT base (declare JWT expiration and sets to 2 hour)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)  # or minutes, days, etc.
-
+app.config["JWT_SECRET_KEY"] = "d27bc704-0772-457d-a860-0ed962dcbf1f"
+#app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta()
 #initialising the BCRYPT AND JWT extensions
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
