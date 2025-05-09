@@ -1,25 +1,33 @@
 import React, { useState } from "react"; //useState is imported from react
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useNavigate } from "react-router-dom";
 import { createLogin } from "../../service/APIservice";
 
 
 
 
 const Login = () => {
+  const navigate = useNavigate()
   const {store, dispatch} = useGlobalReducer()
-  const [formData, setFormData] = useState({
+  const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("")
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setLoginData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleFormInput = (e) => {
+  const handleFormInput = async (e) => {
     e.preventDefault();
-    createLogin(dispatch, formData)
+    const success = await createLogin(dispatch, formData);
+        if (success) {
+          navigate("/"); // Navigate after successful signup
+        } else {
+          setError("Something went wrong during signup."); // Set error message if signup isnt successful
+        }
  
   };
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
@@ -31,7 +39,7 @@ const Login = () => {
             Email
           </label>
           <input
-            value={formData.email}
+            value={loginData.email}
             name="email"
             onChange={handleChange}
             type="text"
@@ -45,7 +53,7 @@ const Login = () => {
             Password
           </label>
           <input
-            value={formData.password}
+            value={loginData.password}
             name="password"
             onChange={handleChange}
             type="password"
@@ -54,7 +62,9 @@ const Login = () => {
             placeholder="enter password"
           />
         </div>
-        <button type= "submit">Register</button>
+        {/*If error is truthy (i.e., has a value like a non-empty string), then it renders the <p> tag with the error message inside it.*/}
+        {error && <p style = {{color: "red"}}>{error}</p>}
+        <button type= "submit">Login</button>
       </div>
     </form>
   );
