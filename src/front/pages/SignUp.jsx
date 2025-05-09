@@ -2,7 +2,6 @@ import React, { useState } from "react"; //useState is imported from react
 import { useNavigate } from "react-router-dom"; //useParam, useLocation, Link, useNavigate de react-dom
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { createSignup } from "../../service/APIservice";
-//import Login from "../pages/Login";
 
 
 
@@ -14,7 +13,9 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
   const [error, setError] = useState("")
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -23,11 +24,17 @@ const SignUp = () => {
 
   const handleFormInput = async (e) => {
     e.preventDefault();
-    const success = await createSignup(dispatch, formData);
-    if (success) {
+    
+    setError(""); // Clear previous errors before submitting
+
+   const response = await createSignup(dispatch, formData);
+    // Check if the response indicates success
+    if (response) {
       navigate("/login"); // Navigate after successful signup
+    } else if (response === "User already exists") {
+      setError("User already exists. Please login.");
     } else {
-      setError("Something went wrong during signup."); // Set error message if signup isnt successful
+      setError("Something went wrong during signup.");
     }
   };
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
