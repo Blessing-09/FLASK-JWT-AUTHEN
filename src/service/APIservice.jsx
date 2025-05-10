@@ -62,7 +62,8 @@ export const createLogin = async (dispatch, info) => {
                 //console.log(user)
         localStorage.setItem("authToken", JSON.stringify(data));
          console.log(data)
-        dispatch({type: "login", payload:data.token});
+         console.log(payload)
+        dispatch({type: "login", payload:data});
         return {success: True};
     } 
     else {
