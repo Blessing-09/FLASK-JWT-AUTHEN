@@ -29,10 +29,8 @@ const SignUp = () => {
 
    const response = await createSignup(dispatch, formData);
     // Check if the response indicates success
-    if (response) {
+    if (response.success) {
       navigate("/login"); // Navigate after successful signup
-    } else if (response === "User already exists") {
-      setError("User already exists. Please login.");
     } else {
       setError("Something went wrong during signup.");
     }
@@ -69,7 +67,8 @@ const SignUp = () => {
             placeholder="enter password"
           />
         </div>
-        {error && <p style = {{color: "red"}}>{error}</p>} {/* Show error message from the setError update*/}
+        {/* Show error message from the setError update*/}
+        {error && <p style = {{color: "red"}}>{error}</p>} 
         <button type= "submit">Register</button>
       </div>
     </form>

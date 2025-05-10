@@ -13,7 +13,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+
   const [error, setError] = useState("")
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -22,11 +24,11 @@ const Login = () => {
 
   const handleFormInput = async (e) => {
     e.preventDefault();
-    const success = await createLogin(dispatch, formData);
-        if (success) {
+    const response = await createLogin(dispatch, loginData);
+        if (response.success) {
           navigate("/"); // Navigate after successful signup
         } else {
-          setError("Something went wrong during signup."); // Set error message if signup isnt successful
+          setError("Something went wrong during login."); // Set error message if signup isnt successful
         }
  
   };

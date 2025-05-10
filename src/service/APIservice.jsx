@@ -21,7 +21,8 @@ export const createSignup = async (dispatch, info) => {
     if(response.status === 201) {
         const data = await response.json()
         console.log(data)
-        dispatch({type: "signup", payload:data.user})
+        dispatch({type: "signup", payload:data.user});
+        return { success: true };
     } 
     else if(response.status === 400) {
         const errorMsg = await response.json()
@@ -53,10 +54,16 @@ export const createLogin = async (dispatch, info) => {
     );
     if(response.status === 200) {
         const data = await response.json()
-        console.log(data)
          // Store the token in localStorage
-        localStorage.setItem("authToken", data.token);
-        dispatch({type: "login", payload:data.token})
+         /*const user = {
+                token: data.token,
+                userId: data.user_id
+                };*/
+                //console.log(user)
+        localStorage.setItem("authToken", JSON.stringify(data));
+         console.log(data)
+        dispatch({type: "login", payload:data.token});
+        return {success: True};
     } 
     else {
         const errorMsg = await response.json()
