@@ -63,14 +63,18 @@ def create_token():
 
 
 # Protect a route with jwt_required, which will kick out requests without a valid JWT
-@api.route("/user", methods=["GET"])
-@jwt_required()
+@api.route("/admin", methods=["GET"])
+@jwt_required() #This decorator protects the route and approves acccess if the request has a valid JWT token in the Authorization header (usually as a Bearer token).
 def get_user():
     # Access the identity of the current user with get_jwt_identity
-    current_user_id = get_jwt_identity()
+    current_user_id = get_jwt_identity() #to get the current user based on the JWT token.
+
     user = User.query.get(current_user_id)
+    if user is None:
+        return jsonify({"msg": "User not found"}), 404
     
     return jsonify({"user": user.serialize()}), 200
+
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
