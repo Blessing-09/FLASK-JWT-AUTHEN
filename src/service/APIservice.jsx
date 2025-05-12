@@ -26,17 +26,20 @@ export const createSignup = async (dispatch, info) => {
     } 
     else if(response.status === 400) {
         const errorMsg = await response.json()
-        alert(errorMsg.Error)
+        return{success: false, 
+            error: errorMsg.Error
+        };
+        
     } else {
         const errorData = await response.json();
         console.error("Signup failed:", errorData);
-        alert(errorData.Msg)
         return {
-            error: true, 
-        }
+           success: false, message: errorData.Msg
+        };
     }
 } catch (error) {
     console.error("Network error:", error);
+    return { success: false, message: "Network error. Please try again later." };
 }
 };
 
@@ -62,16 +65,19 @@ export const createLogin = async (dispatch, info) => {
                 //console.log(user)
         localStorage.setItem("authToken", JSON.stringify(data));
          console.log(data)
-         console.log(payload)
+        
         dispatch({type: "login", payload:data});
-        return {success: True};
+       return {success: true};
     } 
     else {
         const errorMsg = await response.json()
-        alert(errorMsg.msg)
+        return{success: false, 
+            error: errorMsg.msg
+        };
     } 
     
 } catch (error) {
     console.error("Network error:", error);
+     return { success: false, error: "Network error. Please try again later." };
 }
 };

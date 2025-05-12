@@ -55,7 +55,7 @@ def create_token():
      #Query your database for email and password to check if user exists in the User db table(model)
     user = User.query.filter_by(email = email).first()
     if not user or not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"msg": "Incorrcet email or password"}), 401
+        return jsonify({"msg": "Incorrect email or password"}), 401
     
     # Create a new token with the user id inside
     access_token = create_access_token(identity=str(user.id)) #used to identify who is making the request

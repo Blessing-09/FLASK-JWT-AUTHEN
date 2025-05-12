@@ -24,17 +24,17 @@ const Login = () => {
 
   const handleFormInput = async (e) => {
     e.preventDefault();
+
      setError(""); // Clear previous errors before submitting
+
     const response = await createLogin(dispatch, loginData);
         if (response.success) {
-          navigate("/home"); // Navigate after successful signup
+          navigate("/home"); // Navigate after successful login
         } else {
-          setError("Something went wrong during login."); // Set error message if signup isnt successful
+          setError(response.error || "Something went wrong during login."); // Set error message if login isnt successful
         }
   };
-  const handleClick = () => {
-    navigate("/home")
-  }
+
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
   return (
     <form onSubmit={handleFormInput}>
@@ -69,7 +69,7 @@ const Login = () => {
         </div>
         {/*If error is truthy (i.e., has a value like a non-empty string), then it renders the <p> tag with the error message inside it.*/}
         {error && <p style = {{color: "red"}}>{error}</p>}
-        <button type= "submit" onClick={handleClick}>Login</button>
+        <button type= "submit">Login</button>
       </div>
     </form>
   );
