@@ -51,6 +51,14 @@ setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
+# Another endpoint file would be for example:
+#app.register_blueprint(trip, url_prefix='/trip')
+# Then in the FILE we import Blueprint 
+# api = Blueprint('file', __name__)
+# app = Flask(__name__)
+# Allow CORS requests to this API
+#CORS(trip)
+# AND THEN THE ENDPOINT DECORATOR: @trip.route('/signup', methods=['POST'])
 
 # Handle/serialize errors like a JSON object
 
