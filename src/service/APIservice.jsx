@@ -15,14 +15,14 @@ export const createSignup = async (dispatch, info) => {
             headers: {
                "Content-Type": "application/json"
             },
-            body: JSON.stringify(info)
+            body: JSON.stringify(info) //!will send infos in dataToSend!
         }
     );
     if(response.status === 201) {
         const data = await response.json()
         console.log(data)
         dispatch({type: "signup", payload:data.user});
-        return { success: true };
+        return { success: true, message: data.msg};
     } 
     else if(response.status === 400) {
         const errorMsg = await response.json()

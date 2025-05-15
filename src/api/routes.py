@@ -42,7 +42,7 @@ def signup():
 
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"msg": "New user created",
+    return jsonify({"msg": "Successfully signed in ✅!",
                     "user": new_user.serialize()}), 201
 
 

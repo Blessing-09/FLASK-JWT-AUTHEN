@@ -16,6 +16,7 @@ const SignUp = () => {
   });
 
   const [error, setError] = useState("")
+  const [msg, setMsg] = useState("")
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -27,6 +28,7 @@ const SignUp = () => {
     e.preventDefault();
 
     setError(""); // Clear previous errors before submitting
+    setMsg("");
 
     const { email, password, confirmPassword } = formData;
 
@@ -44,19 +46,22 @@ const SignUp = () => {
       return;
     }
     //DESTRUCTURING ALLOW US TO GO FROM formData.password to password
-    if ( password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return; //to stop the function
     }
 
     // Now send to backend (optional: remove confirmPassword from the payload)
-    //Takes the value of confirmPassword and store it in confirmPword to avoid conflict from scope in line 31
+    //Takes the value of confirmPassword and store it in confirmPword variable to avoid conflict from scope in line 31
     const { confirmPassword: confirmPword, ...dataToSend } = formData;
 
     const response = await createSignup(dispatch, dataToSend);
     // Check if the response indicates success
     if (response.success) {
-      navigate("/login"); // Navigate after successful signup
+      setMsg(response.message);
+      setTimeout(() => {
+        navigate("/login"); // Navigate after successful signup
+      }, 3000);
     } else {
       setError(response.message || "Something went wrong during signup.");
     }
@@ -73,7 +78,7 @@ const SignUp = () => {
             value={formData.email}
             name="email"
             onChange={handleChange}
-            type="text"
+            type="email"
             className="form-control"
             id="formGroupExampleInput"
             placeholder="Enter email"
@@ -94,7 +99,7 @@ const SignUp = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput2" className="form-label">
+          <label htmlFor="formGroupExampleInput3" className="form-label">
             Confirm password
           </label>
           <input
@@ -103,12 +108,13 @@ const SignUp = () => {
             onChange={handleChange}
             type="password"
             className="form-control"
-            id="formGroupExampleInput2"
+            id="formGroupExampleInput3"
             placeholder="Confirm password"
           />
         </div>
         {/* Show error message from the setError update*/}
         {error && <p style={{ color: "red" }}>{error}</p>}
+        {msg && <h3 style={{ color: "green" }}>{msg}</h3>}
         <button type="submit">Sign Up</button>
       </div>
     </form>
