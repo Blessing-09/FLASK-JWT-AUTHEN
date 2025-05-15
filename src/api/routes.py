@@ -26,10 +26,15 @@ def signup():
     #check for errors in email and password
     if not email or not password:
         return jsonify({"Error": "Email and Password are required"}), 400
+    if "@" not in email or "." not in email:
+        return jsonify({"Error": "Invalid email format"}), 400
+    # ✅ Password length check
+    if len(password) < 8:
+        return jsonify({"Error": "Password must be at least 8 characters long"}), 400
     #check if a user already exist 
     existing_user = User.query.filter_by(email = email).first()
     if existing_user:
-        return jsonify({"Msg": "User already exist"}), 409
+        return jsonify({"Msg": "A user with this email already exist"}), 409
     
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     #Create new user with the data obtained

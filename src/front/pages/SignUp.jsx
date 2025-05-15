@@ -8,7 +8,7 @@ import { createSignup } from "../../service/APIservice";
 
 const SignUp = () => {
   const navigate = useNavigate()
-  const {store, dispatch} = useGlobalReducer()
+  const { store, dispatch } = useGlobalReducer()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,18 +25,35 @@ const SignUp = () => {
 
   const handleFormInput = async (e) => {
     e.preventDefault();
-    
+
     setError(""); // Clear previous errors before submitting
 
-    if(formData.password !== formData.confirmPassword) {
+    const { email, password, confirmPassword } = formData;
+
+    // Check for empty fields
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill in all the fields.");
+      return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+      setError("Please enter a valid email.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    //DESTRUCTURING ALLOW US TO GO FROM formData.password to password
+    if ( password !== confirmPassword) {
       setError("Passwords do not match.");
       return; //to stop the function
     }
 
     // Now send to backend (optional: remove confirmPassword from the payload)
-  const { confirmPassword, ...dataToSend } = formData;
+    //Takes the value of confirmPassword and store it in confirmPword to avoid conflict from scope in line 31
+    const { confirmPassword: confirmPword, ...dataToSend } = formData;
 
-   const response = await createSignup(dispatch, dataToSend);
+    const response = await createSignup(dispatch, dataToSend);
     // Check if the response indicates success
     if (response.success) {
       navigate("/login"); // Navigate after successful signup
@@ -91,8 +108,8 @@ const SignUp = () => {
           />
         </div>
         {/* Show error message from the setError update*/}
-        {error && <p style = {{color: "red"}}>{error}</p>} 
-        <button type= "submit">Sign Up</button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <button type="submit">Sign Up</button>
       </div>
     </form>
   );

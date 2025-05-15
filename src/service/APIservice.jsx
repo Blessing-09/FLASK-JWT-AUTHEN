@@ -27,7 +27,7 @@ export const createSignup = async (dispatch, info) => {
     else if(response.status === 400) {
         const errorMsg = await response.json()
         return{success: false, 
-            error: errorMsg.Error
+            message: errorMsg.Error
         };
         
     } else {

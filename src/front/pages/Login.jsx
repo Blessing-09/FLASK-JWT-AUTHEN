@@ -2,6 +2,7 @@ import React, { useState } from "react"; //useState is imported from react
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useNavigate } from "react-router-dom";
 import { createLogin } from "../../service/APIservice";
+import { array } from "prop-types";
 
 
 
@@ -10,10 +11,10 @@ const Login = () => {
   const navigate = useNavigate()
   const {store, dispatch} = useGlobalReducer()
   const [loginData, setLoginData] = useState({
-    email: "",
+    email: store?.signup.at(-1)?.email || "",
     password: "",
   });
-
+console.log(store)
   const [error, setError] = useState("")
 
   const handleChange = (e) => {
