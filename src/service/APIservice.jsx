@@ -107,7 +107,7 @@ export const createProfile = async (dispatch) => {
             const data = await response.json()
             console.log(data)
 
-            dispatch({ type: "login", payload: data.user });
+            dispatch({ type: "profile", payload: data.user });
             return { success: true };
         }
         else {
