@@ -32,7 +32,7 @@ console.log(store)
         if (response.success) {
           navigate("/home"); // Navigate after successful login
         } else {
-          setError(response.error || "Something went wrong during login."); // Set error message if login isnt successful
+          setError(response.message || "Something went wrong during login."); // Set error message if login isnt successful
         }
   };
 

@@ -42,7 +42,7 @@ def signup():
 
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"msg": "Successfully signed in ✅!",
+    return jsonify({"msg": "New user created!",
                     "user": new_user.serialize()}), 201
 
 
@@ -66,10 +66,10 @@ def create_token():
 
 
 # Protect a route with jwt_required, which will kick out requests without a valid JWT
-@api.route("/admin", methods=["GET"])
+@api.route("/profile", methods=["GET"])
 @jwt_required() #This decorator protects the route and approves acccess if the request has a valid JWT token in the Authorization header (usually as a Bearer token).
 def get_user():
-    # Access the identity of the current user with get_jwt_identity
+    #  extracts the identity stored inside the JWT token.
     current_user_id = get_jwt_identity() #to get the current user based on the JWT token.
 
     user = User.query.get(current_user_id)
