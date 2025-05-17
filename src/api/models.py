@@ -30,4 +30,5 @@ class TokenBlocklist(db.Model):
     jti:  Mapped[str] = mapped_column(
         String(36), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
+    #lambda(a callable) gets the fresh current time on each new record
     #created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
