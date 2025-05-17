@@ -56,7 +56,9 @@ export const createLogin = async (dispatch, info) => {
                 body: JSON.stringify(info)
             }
         );
-        if (response.status === 200) {
+         console.log(response)
+
+        if (response.ok) {
             const data = await response.json()
             // Store the token in localStorage
             /*const user = {
@@ -103,6 +105,7 @@ export const createProfile = async (dispatch) => {
                 },
             }
         );
+       
         if (response.status === 200) {
             const data = await response.json()
             console.log(data)

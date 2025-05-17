@@ -2,17 +2,18 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, TokenBlocklist
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, JWTManager, get_jwt
 
 
 
 api = Blueprint('api', __name__)
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 # Allow CORS requests to this API
 CORS(api)
 
@@ -88,3 +89,24 @@ def handle_hello():
 
     return jsonify(response_body), 200
     
+
+@jwt.token_in_blocklist_loader #check if the token is revoked, expects a Boolean return(True/False)
+def check_if_token_revoked(jwt_header, jwt_payload):
+    jti = jwt_payload["jti"]
+    token = TokenBlocklist.query.filter_by(jti=jti).first()
+    return token is not None  # If found → token is revoked
+
+@jwt.revoked_token_loader #defines the JSON response if the token is revoked
+def revoked_token_callback(jwt_header, jwt_payload):
+    return jsonify({
+        "error": "Token revoked",
+        "message": "Your token has been revoked. Please log in again."
+    }), 401
+
+@api.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    jti = get_jwt()["jti"]  # Get token ID
+    db.session.add(TokenBlocklist(jti=jti)) #adds new record to the table
+    db.session.commit() #saves new blocklist permanently. Now, your token is recorded as revoked.
+    return jsonify(msg="Successfully logged out"), 200
