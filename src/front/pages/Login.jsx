@@ -43,25 +43,33 @@ const Login = () => {
   };
 
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
-  return (
-    <form onSubmit={handleFormInput}>
-      <div>
+   return (
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+      <form
+        onSubmit={handleFormInput}
+        className="p-4 rounded shadow bg-white"
+        style={{ width: "100%", maxWidth: "400px" }}
+      >
+        <h3 className="mb-4 text-center text-primary">Login</h3>
+
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput" className="form-label">
+          <label htmlFor="email" className="form-label fw-semibold">
             Email
           </label>
           <input
             value={loginData.email}
             name="email"
             onChange={handleChange}
-            type="text"
+            type="email"
             className="form-control"
-            id="formGroupExampleInput"
-            placeholder="enter email"
+            id="email"
+            placeholder="Enter your email"
+            required
           />
         </div>
+
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput2" className="form-label">
+          <label htmlFor="password" className="form-label fw-semibold">
             Password
           </label>
           <input
@@ -70,16 +78,20 @@ const Login = () => {
             onChange={handleChange}
             type="password"
             className="form-control"
-            id="formGroupExampleInput2"
-            placeholder="enter password"
+            id="password"
+            placeholder="Enter your password"
+            required
           />
         </div>
-        {/*If error is truthy (i.e., has a value like a non-empty string), then it renders the <p> tag with the error message inside it.*/}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {msg && <p style={{ color: "green" }}>{msg}</p>}
-        <button type="submit">Login</button>
-      </div>
-    </form>
+
+        {error && <p className="text-danger small mt-2">{error}</p>}
+        {msg && <p className="text-success small mt-2">{msg}</p>}
+
+        <button type="submit" className="btn btn-primary w-100 mt-3">
+          Login
+        </button>
+      </form>
+    </div>
   );
 };
 

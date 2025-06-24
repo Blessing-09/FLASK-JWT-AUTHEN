@@ -39,26 +39,30 @@ export const Navbar = () => {
 
 
 	return (
-		<nav className="navbar navbar-light bg-dark">
-			<div className="container">
+		<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div className="container d-flex justify-content-between align-items-center">
+				
+				{/* Left side - Home link */}
+				<Link to="/" className="navbar-brand text-white">
+					🏠 Home
+				</Link>
 
-				<div className="ml-auto">
+				{/* Right side - Signup/Login/Logout */}
+				<div className="d-flex gap-2">
 					<Link to="/signup">
 						<button className="btn btn-success">SIGN UP</button>
 					</Link>
-				</div>
-				{!token ? (
-					<>
-						<div className="ml-auto">
-							<Link to="/login">
-								<button className="btn btn-primary">LOG IN</button>
-							</Link>
-						</div> </>) : (
-					<button className="btn btn-danger" onClick={handleLogout}>
-						LOG OUT
-					</button>
-				)}
 
+					{!token ? (
+						<Link to="/login">
+							<button className="btn btn-primary">LOG IN</button>
+						</Link>
+					) : (
+						<button className="btn btn-danger" onClick={handleLogout}>
+							LOG OUT
+						</button>
+					)}
+				</div>
 			</div>
 		</nav>
 	);

@@ -69,10 +69,16 @@ const SignUp = () => {
   };
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
   return (
-    <form onSubmit={handleFormInput}>
-      <div>
+    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+      <form
+        onSubmit={handleFormInput}
+        className="p-4 rounded shadow bg-white"
+        style={{ width: "100%", maxWidth: "400px" }}
+      >
+        <h3 className="mb-4 text-center text-success">Sign Up</h3>
+
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput" className="form-label">
+          <label htmlFor="email" className="form-label fw-semibold">
             Email
           </label>
           <input
@@ -81,12 +87,14 @@ const SignUp = () => {
             onChange={handleChange}
             type="email"
             className="form-control"
-            id="formGroupExampleInput"
+            id="email"
             placeholder="Enter email"
+            required
           />
         </div>
+
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput2" className="form-label">
+          <label htmlFor="password" className="form-label fw-semibold">
             Password
           </label>
           <input
@@ -95,13 +103,15 @@ const SignUp = () => {
             onChange={handleChange}
             type="password"
             className="form-control"
-            id="formGroupExampleInput2"
+            id="password"
             placeholder="Enter password"
+            required
           />
         </div>
+
         <div className="mb-3">
-          <label htmlFor="formGroupExampleInput3" className="form-label">
-            Confirm password
+          <label htmlFor="confirmPassword" className="form-label fw-semibold">
+            Confirm Password
           </label>
           <input
             value={formData.confirmPassword}
@@ -109,16 +119,20 @@ const SignUp = () => {
             onChange={handleChange}
             type="password"
             className="form-control"
-            id="formGroupExampleInput3"
+            id="confirmPassword"
             placeholder="Confirm password"
+            required
           />
         </div>
-        {/* Show error message from the setError update*/}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {msg && <p style={{ color: "green" }}>{msg}</p>}
-        <button type="submit">Sign Up</button>
-      </div>
-    </form>
+
+        {error && <p className="text-danger small mt-2">{error}</p>}
+        {msg && <p className="text-success small mt-2">{msg}</p>}
+
+        <button type="submit" className="btn btn-success w-100 mt-3">
+          Sign Up
+        </button>
+      </form>
+    </div>
   );
 };
 
