@@ -9,13 +9,14 @@ import { array } from "prop-types";
 
 const Login = () => {
   const navigate = useNavigate()
-  const {store, dispatch} = useGlobalReducer()
+  const { store, dispatch } = useGlobalReducer()
   const [loginData, setLoginData] = useState({
     email: store?.signup.at(-1)?.email || "",
     password: "",
   });
-console.log(store)
+  console.log(store)
   const [error, setError] = useState("")
+  const [msg, setMsg] = useState("")
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -26,14 +27,19 @@ console.log(store)
   const handleFormInput = async (e) => {
     e.preventDefault();
 
-     setError(""); // Clear previous errors before submitting
+    setError(""); // Clear previous errors before submitting
+    setMsg("");
 
     const response = await createLogin(dispatch, loginData);
-        if (response.success) {
-          navigate("/home"); // Navigate after successful login
-        } else {
-          setError(response.message || "Something went wrong during login."); // Set error message if login isnt successful
-        }
+    if (response.success) {
+      setMsg(response.message || "Login successful...redirecting.");
+      //  setMsg(response.message || "Login successful...redirecting."); here there is no response.message so the || would always run.
+      setTimeout(() => {
+        navigate("/profile"); // Navigate after successful login
+      }, 2000);
+    } else {
+      setError(response.error || "Something went wrong during login."); // Set error message if login isnt successful
+    }
   };
 
   //onChange={(e) => setFormData(prevData => ({...prevData, email:e.target.value}))}
@@ -69,8 +75,9 @@ console.log(store)
           />
         </div>
         {/*If error is truthy (i.e., has a value like a non-empty string), then it renders the <p> tag with the error message inside it.*/}
-        {error && <p style = {{color: "red"}}>{error}</p>}
-        <button type= "submit">Login</button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {msg && <p style={{ color: "green" }}>{msg}</p>}
+        <button type="submit">Login</button>
       </div>
     </form>
   );

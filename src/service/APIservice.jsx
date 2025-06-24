@@ -8,28 +8,28 @@ if (!backendUrl) {
 }
 
 export const loadMessage = async (dispatch) => {
-  try {
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    try {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const response = await fetch(`${backendUrl}/hello`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+        const response = await fetch(`${backendUrl}/hello`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (response.ok) {
-      dispatch({ type: "set_hello", payload: data.message });
+        if (response.ok) {
+            dispatch({ type: "set_hello", payload: data.message });
+        }
+        return data;
+
+    } catch (error) {
+        throw new Error(
+            `Could not fetch the message from the backend. Please check if the backend is running and the backend port is public.`
+        );
     }
-    return data;
-    
-  } catch (error) {
-    throw new Error(
-      `Could not fetch the message from the backend. Please check if the backend is running and the backend port is public.`
-    );
-  }
 };
 
 
@@ -82,20 +82,31 @@ export const createLogin = async (dispatch, info) => {
                 body: JSON.stringify(info)
             }
         );
-        console.log(response)
+
 
         if (response.ok) {
             const data = await response.json()
-            // Store the token in localStorage
+            // Store the token in sessionStorage
             /*const user = {
                    token: data.token,
                    userId: data.user_id
                    };*/
             //console.log(user)
-            localStorage.setItem("authToken", JSON.stringify(data));
+            sessionStorage.setItem("authToken", JSON.stringify(data));
             console.log(data)
 
+            // Save login to store
             dispatch({ type: "login", payload: data });
+
+            // Save profile to store (important!)
+            dispatch({
+                type: "profile", payload: {
+                    id: data.user_id,
+                    email: data.email,     // or data.user.email, depending on backend
+                    // name: data.name || "User", // add more fields if needed
+                    // token: data.token
+                }
+            });
             return { success: true };
         }
         else {
@@ -116,7 +127,19 @@ export const createLogin = async (dispatch, info) => {
 
 export const createProfile = async (dispatch) => {
 
-    const token = localStorage.getItem("authToken");
+    // const token = sessionStorage.getItem("authToken");
+    const storedData = sessionStorage.getItem("authToken");
+
+    let token = null;
+
+    if (storedData) {
+        try {
+            const parsed = JSON.parse(storedData);
+            token = parsed.token; // extract the token string only
+        } catch {
+            token = null; // fallback, just in case
+        }
+    }
 
     if (!token) {
         return { success: false, message: "No authentication token found." };
@@ -154,3 +177,41 @@ export const createProfile = async (dispatch) => {
 };
 
 
+export const logoutUser = async (dispatch) => {
+  const storedData = sessionStorage.getItem("authToken");
+
+  if (!storedData) {
+    return { success: false, message: "No token found in session." };
+  }
+
+  let token = null;
+  try {
+    const parsed = JSON.parse(storedData);
+    token = parsed.token;
+  } catch {
+    return { success: false, message: "Invalid token format." };
+  }
+
+  try {
+    const response = await fetch(`${backendUrl}/logout`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      // Clear session data and update global state
+      sessionStorage.removeItem("authToken");
+      
+      dispatch({ type: "login", payload: [] });   // Reset login
+      dispatch({ type: "profile", payload: null }); // Clear profile
+      return { success: true, message: "Logged out successfully." };
+    } else {
+      return { success: false, message: "Logout failed." };
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    return { success: false, message: "Network error during logout." };
+  }
+};

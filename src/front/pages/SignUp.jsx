@@ -7,6 +7,7 @@ import { createSignup } from "../../service/APIservice";
 
 
 const SignUp = () => {
+
   const navigate = useNavigate()
   const { store, dispatch } = useGlobalReducer()
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ const SignUp = () => {
       setError("Please fill in all the fields.");
       return;
     }
-    if (!email.includes("@") || !email.includes(".")) {
+    if (!email.includes("@") || !email.includes(".") || !email.includes("com")) {
       setError("Please enter a valid email.");
       return;
     }
@@ -52,7 +53,7 @@ const SignUp = () => {
     }
 
     // Now send to backend (optional: remove confirmPassword from the payload)
-    //Takes the value of confirmPassword and store it in confirmPword variable to avoid conflict from scope in line 31
+    //Takes the value of confirmPassword and store it in confirmPword variable to avoid conflict from scope in line 34
     const { confirmPassword: confirmPword, ...dataToSend } = formData;
 
     const response = await createSignup(dispatch, dataToSend);
@@ -114,7 +115,7 @@ const SignUp = () => {
         </div>
         {/* Show error message from the setError update*/}
         {error && <p style={{ color: "red" }}>{error}</p>}
-        {msg && <h3 style={{ color: "green" }}>{msg}</h3>}
+        {msg && <p style={{ color: "green" }}>{msg}</p>}
         <button type="submit">Sign Up</button>
       </div>
     </form>
