@@ -7,6 +7,32 @@ if (!backendUrl) {
     throw new Error("VITE_BACKEND_URL is not defined in .env file");
 }
 
+export const loadMessage = async (dispatch) => {
+  try {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+    const response = await fetch(`${backendUrl}/hello`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: "set_hello", payload: data.message });
+    }
+    return data;
+    
+  } catch (error) {
+    throw new Error(
+      `Could not fetch the message from the backend. Please check if the backend is running and the backend port is public.`
+    );
+  }
+};
+
+
 export const createSignup = async (dispatch, info) => {
     try {
         const response = await fetch(`${backendUrl}/signup`,
@@ -56,7 +82,7 @@ export const createLogin = async (dispatch, info) => {
                 body: JSON.stringify(info)
             }
         );
-         console.log(response)
+        console.log(response)
 
         if (response.ok) {
             const data = await response.json()
@@ -105,7 +131,7 @@ export const createProfile = async (dispatch) => {
                 },
             }
         );
-       
+
         if (response.status === 200) {
             const data = await response.json()
             console.log(data)
@@ -126,3 +152,5 @@ export const createProfile = async (dispatch) => {
         return { success: false, message: "Network error. Please try again later." };
     }
 };
+
+

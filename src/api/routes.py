@@ -27,7 +27,7 @@ def signup():
     #check for errors in email and password
     if not email or not password:
         return jsonify({"Error": "Email and Password are required"}), 400
-    if "@" not in email or "." not in email:
+    if "@" not in email or "." not in email or "com" not in email:
         return jsonify({"Error": "Invalid email format"}), 400
     # ✅ Password length check
     if len(password) < 8:
