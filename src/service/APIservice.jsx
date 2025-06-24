@@ -208,7 +208,7 @@ export const logoutUser = async (dispatch) => {
       dispatch({ type: "profile", payload: null }); // Clear profile
       return { success: true, message: "Logged out successfully." };
     } else {
-      return { success: false, message: "Logout failed." };
+      return { success: false, message: "Logout unsuccessful." };
     }
   } catch (error) {
     console.error("Logout error:", error);
